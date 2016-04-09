@@ -142,7 +142,7 @@
             "Type": "CNAME",
             "TTL" : "900",
             "ResourceRecords" : [
-              {"Fn::GetAtt":["WWWBucket", "DomainName"]}
+              {"Ref":"RootDomainName"}
             ]
           }
         ]
