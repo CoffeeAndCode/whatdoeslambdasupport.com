@@ -4,7 +4,7 @@
   "description": "Serverless Lambda function for project: whatdoeslambdasupport",
   "customName": false,
   "customRole": false,
-  "handler": "handler.handler",
+  "handler": "functions/generate/handler.handler",
   "timeout": 30,
   "memorySize": 128,
   "authorizer": {},
