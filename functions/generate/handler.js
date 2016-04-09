@@ -40,6 +40,7 @@ module.exports.handler = function(event, context) {
   var source = readFileSync(path.join(__dirname, 'templates', 'index.html.hbs'));
   var template = handlebars.compile(source.toString());
   var html = template({
+    buildTime: new Date(),
     tests: testResults
   });
 
