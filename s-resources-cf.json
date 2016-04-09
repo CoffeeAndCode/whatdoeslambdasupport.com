@@ -68,6 +68,15 @@
                 "logs:PutLogEvents"
               ],
               "Resource": "arn:aws:logs:${region}:*:*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:DeleteObject",
+                "s3:GetObject",
+                "s3:PutObject"
+              ],
+              "Resource": {"Fn::Join": ["", ["arn:aws:s3:::", {"Ref":"RootDomainName"}, "/*"]]}
             }
           ]
         },
@@ -136,7 +145,8 @@
             ]
           }
         ]
-      }
+      },
+      "DependsOn": ["RootBucket", "Route53HostedZone", "WWWBucket"]
     },
     "WebsiteHealthIndexFileCheck": {
       "Type": "AWS::Route53::HealthCheck",
@@ -149,7 +159,8 @@
           "RequestInterval": "30",
           "FailureThreshold": "3"
         }
-      }
+      },
+      "DependsOn": "RootBucket"
     },
     "WebsiteHealthErrorFileCheck": {
       "Type": "AWS::Route53::HealthCheck",
@@ -162,7 +173,8 @@
           "RequestInterval": "30",
           "FailureThreshold": "3"
         }
-      }
+      },
+      "DependsOn": "RootBucket"
     }
   },
   "Outputs": {
