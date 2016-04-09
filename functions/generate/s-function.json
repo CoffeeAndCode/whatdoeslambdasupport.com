@@ -12,7 +12,14 @@
     "excludePatterns": []
   },
   "endpoints": [],
-  "events": [],
+  "events": [{
+    "name": "dailyRebuild",
+    "type": "schedule",
+    "config": {
+      "schedule": "rate(1 day)",
+      "enabled": true
+    }
+  }],
   "environment": {
     "SERVERLESS_PROJECT": "${project}",
     "SERVERLESS_STAGE": "${stage}",
