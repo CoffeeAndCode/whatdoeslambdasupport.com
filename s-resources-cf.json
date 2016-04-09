@@ -1,6 +1,35 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "The AWS CloudFormation template for this Serverless application's resources outside of Lambdas and Api Gateway",
+  "Mappings" : {
+    "RegionMap" : {
+      "us-east-1" : { "S3hostedzoneID" : "Z3AQBSTGFYJSTF", "websiteendpoint" : "s3-website-us-east-1.amazonaws.com" },
+      "us-west-1" : { "S3hostedzoneID" : "Z2F56UZL2M1ACD", "websiteendpoint" : "s3-website-us-west-1.amazonaws.com" },
+      "us-west-2" : { "S3hostedzoneID" : "Z3BJ6K6RIION7M", "websiteendpoint" : "s3-website-us-west-2.amazonaws.com" },
+      "eu-west-1" : { "S3hostedzoneID" : "Z1BKCTXD74EZPE", "websiteendpoint" : "s3-website-eu-west-1.amazonaws.com" },
+      "ap-southeast-1" : { "S3hostedzoneID" : "Z3O0J2DXBE1FTB", "websiteendpoint" : "s3-website-ap-southeast-1.amazonaws.com" },
+      "ap-southeast-2" : { "S3hostedzoneID" : "Z1WCIGYICN2BYD", "websiteendpoint" : "s3-website-ap-southeast-2.amazonaws.com" },
+      "ap-northeast-1" : { "S3hostedzoneID" : "Z2M4EHUR26P7ZW", "websiteendpoint" : "s3-website-ap-northeast-1.amazonaws.com" },
+      "sa-east-1" : { "S3hostedzoneID" : "Z31GFT0UA1I2HV", "websiteendpoint" : "s3-website-sa-east-1.amazonaws.com" }
+    }
+  },
+  "Parameters": {
+    "ErrorDocument": {
+      "Description": "Default html file to use for website errors (404.html)",
+      "Type": "String",
+      "Default": "404.html"
+    },
+    "IndexDocument": {
+      "Description": "Default html file to use for the website (index.html)",
+      "Type": "String",
+      "Default": "index.html"
+    },
+    "RootDomainName": {
+      "Description": "Domain name for your website (example.com)",
+      "Type": "String",
+      "Default": "${websiteURL}"
+    }
+  },
   "Resources": {
     "IamRoleLambda": {
       "Type": "AWS::IAM::Role",
@@ -48,6 +77,92 @@
           }
         ]
       }
+    },
+    "RootBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName" : {"Ref":"RootDomainName"},
+        "AccessControl": "PublicRead",
+        "WebsiteConfiguration": {
+          "IndexDocument": {"Ref": "IndexDocument"},
+          "ErrorDocument": {"Ref": "ErrorDocument"}
+        }
+      }
+    },
+    "WWWBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Fn::Join": ["", ["www.", {"Ref":"RootDomainName"}]]
+        },
+        "AccessControl": "BucketOwnerFullControl",
+        "WebsiteConfiguration": {
+          "RedirectAllRequestsTo": {
+            "HostName": {"Ref": "RootBucket"}
+          }
+        }
+      }
+    },
+    "Route53HostedZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "Name": {"Ref": "RootDomainName"}
+      }
+    },
+    "myDNS": {
+      "Type": "AWS::Route53::RecordSetGroup",
+      "Properties": {
+        "HostedZoneName": {
+          "Fn::Join": ["", [{"Ref": "RootDomainName"}, "."]]
+        },
+        "Comment": "Zone apex alias.",
+        "RecordSets": [
+          {
+            "Name": {"Ref": "RootDomainName"},
+            "Type": "A",
+            "AliasTarget": {
+              "HostedZoneId": {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "S3hostedzoneID"]},
+              "DNSName": {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "websiteendpoint"]}
+            }
+          },
+          {
+            "Name": {
+              "Fn::Join": ["", ["www.", {"Ref":"RootDomainName"}]]
+            },
+            "Type": "CNAME",
+            "TTL" : "900",
+            "ResourceRecords" : [
+              {"Fn::GetAtt":["WWWBucket", "DomainName"]}
+            ]
+          }
+        ]
+      }
+    },
+    "WebsiteHealthIndexFileCheck": {
+      "Type": "AWS::Route53::HealthCheck",
+      "Properties": {
+        "HealthCheckConfig": {
+          "Port": "80",
+          "Type": "HTTP",
+          "ResourcePath": {"Fn::Join": ["", ["/", {"Ref":"IndexDocument"}]]},
+          "FullyQualifiedDomainName": {"Ref": "RootDomainName"},
+          "RequestInterval": "30",
+          "FailureThreshold": "3"
+        }
+      }
+    },
+    "WebsiteHealthErrorFileCheck": {
+      "Type": "AWS::Route53::HealthCheck",
+      "Properties": {
+        "HealthCheckConfig": {
+          "Port": "80",
+          "Type": "HTTP",
+          "ResourcePath": {"Fn::Join": ["", ["/", {"Ref":"ErrorDocument"}]]},
+          "FullyQualifiedDomainName": {"Ref": "RootDomainName"},
+          "RequestInterval": "30",
+          "FailureThreshold": "3"
+        }
+      }
     }
   },
   "Outputs": {
@@ -59,6 +174,10 @@
           "Arn"
         ]
       }
+    },
+    "WebsiteURL": {
+      "Value": {"Fn::GetAtt": ["RootBucket", "WebsiteURL"]},
+      "Description": "URL for website hosted on S3"
     }
   }
 }
