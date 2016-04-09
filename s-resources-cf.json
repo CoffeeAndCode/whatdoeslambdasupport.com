@@ -27,7 +27,7 @@
     "RootDomainName": {
       "Description": "Domain name for your website (example.com)",
       "Type": "String",
-      "Default": "${websiteURL}"
+      "Default": "${domainName}"
     }
   },
   "Resources": {
