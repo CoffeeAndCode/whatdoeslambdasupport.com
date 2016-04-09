@@ -1,6 +1,7 @@
 'use strict';
 
 var aws = require('aws-sdk');
+var handlebars = require('handlebars');
 var path = require('path');
 var readFileSync = require('fs').readFileSync;
 
@@ -17,30 +18,38 @@ module.exports.handler = function(event, context) {
     return capturedError;
   }
 
-  function test(description, testFile) {
+  var tests = {
+    'const.js': 'Check for the const keyword.',
+    'let.js': 'Check for the let keyword.',
+    'letWithoutStrictMode.js': 'Check for the let keyword without using strict mode.',
+    'Promise.js': 'Check for the Promise constant.',
+    'defaultFunctionArguments.js': 'Check for default function arguments.',
+    'templateStrings.js': 'Check for template strings.'
+  };
+  var testResults = Object.keys(tests).map(function(testFileName, index) {
     var error = catchError(function() {
-      eval(readFileSync(path.join(__dirname, 'tests', testFile)).toString());
+      eval(readFileSync(path.join(__dirname, 'tests', testFileName)).toString());
     });
 
-    if (error) {
-      console.error(description, error);
+    return {
+      error: error,
+      test: tests[testFileName]
     }
-  }
+  });
 
-  test('Check for the const keyword.', 'const.js');
-  test('Check for the let keyword.', 'let.js');
-  test('Check for the let keyword.', 'letWithoutStrictMode.js');
-  test('Check for the Promise constant.', 'Promise.js');
-  test('Check for default function arguments.', 'defaultFunctionArguments.js');
-  test('Check for template strings.', 'templateStrings.js');
+  var source = readFileSync(path.join(__dirname, 'templates', 'index.html.hbs'));
+  var template = handlebars.compile(source.toString());
+  var html = template({
+    tests: testResults
+  });
 
   var s3 = new aws.S3();
   s3.putObject({
     ACL: 'public-read',
+    Body: html,
     Bucket: process.env['S3_WEBSITE_BUCKET'],
-    Key: 'index.html',
-    Body: '<h1>hello</h1>',
-    ContentType: 'text/html'
+    ContentType: 'text/html',
+    Key: 'index.html'
   }, function(error, data) {
     if (error) console.log(error.message); // an error occurred
     else     console.log(data);           // successful response
