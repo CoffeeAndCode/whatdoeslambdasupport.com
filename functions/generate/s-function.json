@@ -5,8 +5,8 @@
   "customName": false,
   "customRole": false,
   "handler": "handler.handler",
-  "timeout": 6,
-  "memorySize": 1024,
+  "timeout": 30,
+  "memorySize": 128,
   "authorizer": {},
   "custom": {
     "excludePatterns": []
@@ -16,7 +16,8 @@
   "environment": {
     "SERVERLESS_PROJECT": "${project}",
     "SERVERLESS_STAGE": "${stage}",
-    "SERVERLESS_REGION": "${region}"
+    "SERVERLESS_REGION": "${region}",
+    "S3_WEBSITE_BUCKET": "${domainName}"
   },
   "vpc": {
     "securityGroupIds": [],
