@@ -30,6 +30,6 @@
     "handlebars": "^4.0.5"
   },
   "devDependencies": {
-    "serverless": "^0.5.3"
+    "serverless": "github:serverless/serverless#master"
   }
 }
