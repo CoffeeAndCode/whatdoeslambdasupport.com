@@ -76,7 +76,8 @@
                 "s3:PutObjectAcl"
               ],
               "Resource": [
-                {"Fn::Join": ["", ["arn:aws:s3:::", {"Ref":"RootDomainName"}, "/*"]]}
+                {"Fn::Join": ["", ["arn:aws:s3:::", {"Ref":"RootDomainName"}, "/*"]]},
+                {"Fn::Join": ["", ["arn:aws:s3:::", "v0-10-4.", {"Ref":"RootDomainName"}, "/*"]]}
               ]
             }
           ]
@@ -113,6 +114,19 @@
         }
       }
     },
+    "v0104Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Fn::Join": ["", ["v0-10-4.", {"Ref":"RootDomainName"}]]
+        },
+        "AccessControl": "PublicRead",
+        "WebsiteConfiguration": {
+          "IndexDocument": {"Ref": "IndexDocument"},
+          "ErrorDocument": {"Ref": "ErrorDocument"}
+        }
+      }
+    },
     "Route53HostedZone": {
       "Type": "AWS::Route53::HostedZone",
       "Properties": {
@@ -144,10 +158,20 @@
             "ResourceRecords" : [
               {"Ref":"RootDomainName"}
             ]
+          },
+          {
+            "Name": {
+              "Fn::Join": ["", ["v0-10-4.", {"Ref":"RootDomainName"}]]
+            },
+            "Type": "CNAME",
+            "TTL" : "900",
+            "ResourceRecords" : [
+              {"Fn::Join": [".", ["v0-10-4", {"Ref":"RootDomainName"}, {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "websiteendpoint"]}]]}
+            ]
           }
         ]
       },
-      "DependsOn": ["RootBucket", "Route53HostedZone", "WWWBucket"]
+      "DependsOn": ["RootBucket", "Route53HostedZone", "v0104Bucket", "WWWBucket"]
     },
     "WebsiteHealthIndexFileCheck": {
       "Type": "AWS::Route53::HealthCheck",
@@ -176,6 +200,34 @@
         }
       },
       "DependsOn": "RootBucket"
+    },
+    "WebsiteHealthIndexFileCheckv0104": {
+      "Type": "AWS::Route53::HealthCheck",
+      "Properties": {
+        "HealthCheckConfig": {
+          "Port": "80",
+          "Type": "HTTP",
+          "ResourcePath": {"Fn::Join": ["", ["/", {"Ref":"IndexDocument"}]]},
+          "FullyQualifiedDomainName": {"Fn::Join": [".", ["v0-10-4", {"Ref":"RootDomainName"}]]},
+          "RequestInterval": "30",
+          "FailureThreshold": "3"
+        }
+      },
+      "DependsOn": "v0104Bucket"
+    },
+    "WebsiteHealthErrorFileCheckv0104": {
+      "Type": "AWS::Route53::HealthCheck",
+      "Properties": {
+        "HealthCheckConfig": {
+          "Port": "80",
+          "Type": "HTTP",
+          "ResourcePath": {"Fn::Join": ["", ["/", {"Ref":"ErrorDocument"}]]},
+          "FullyQualifiedDomainName": {"Fn::Join": [".", ["v0-10-4", {"Ref":"RootDomainName"}]]},
+          "RequestInterval": "30",
+          "FailureThreshold": "3"
+        }
+      },
+      "DependsOn": "v0104Bucket"
     }
   },
   "Outputs": {

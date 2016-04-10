@@ -1,10 +1,10 @@
 {
-  "name": "generate",
-  "runtime": "nodejs4.3",
+  "name": "generate_0_10_4",
+  "runtime": "nodejs",
   "description": "Serverless Lambda function for project: whatdoeslambdasupport",
   "customName": false,
   "customRole": false,
-  "handler": "generate/handler.handler",
+  "handler": "generate_0_10_4/handler.handler",
   "timeout": 30,
   "memorySize": 128,
   "authorizer": {},
@@ -13,7 +13,7 @@
   },
   "endpoints": [],
   "events": [{
-    "name": "dailyRebuild",
+    "name": "dailyRebuild_v0_10_4",
     "type": "schedule",
     "config": {
       "schedule": "rate(1 day)",
@@ -24,7 +24,7 @@
     "SERVERLESS_PROJECT": "${project}",
     "SERVERLESS_STAGE": "${stage}",
     "SERVERLESS_REGION": "${region}",
-    "S3_WEBSITE_BUCKET": "${domainName}"
+    "S3_WEBSITE_BUCKET": "v0-10-4.${domainName}"
   },
   "vpc": {
     "securityGroupIds": [],
