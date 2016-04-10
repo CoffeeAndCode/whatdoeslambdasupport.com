@@ -13,11 +13,17 @@
   <body>
     <div class="container">
       <h1>What does AWS Lambda's Node.js environment support?</h1>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=coffeeandcode&repo=whatdoeslambdasupport.com&type=fork&count=false&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+
       <ul>
         {{#each tests}}
           <li>{{#if error}}FAIL{{else}}SUCCESS{{/if}} - {{test}} : {{error.message}}</li>
         {{/each}}
       </ul>
+
+      <p>We are looking for pull requests for additional tests on the
+        [open source Github project](https://github.com/CoffeeAndCode/whatdoeslambdasupport.com).</p>
       <p>For an in depth look at what features are available across the major Node
         releases, check out the <a href="http://kangax.github.io/compat-table/">Kangax compatibility tables</a>.</p>
     </div>
@@ -25,7 +31,7 @@
     <footer>
       <div class="container">
         <p>Made with love by the web consultants at <a href="http://www.coffeeandcode.com/?utm_source=whatdoeslambdasupport.com&utm_medium=footer_link&utm_campaign=open_source">Coffee and Code</a>.
-          Last built at {{buildTime}}.</p>
+          Last built on {{buildTime}}.</p>
       </div>
     </footer>
   </body>

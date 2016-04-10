@@ -20,5 +20,11 @@ commands though.
 You can run the Lambda function locally with:
 
 ```bash
-npm run serverless function run generate
+npm start # an alias for `serverless function run generate`
+```
+
+and bring up the Serverless deployment dashboard with:
+
+```bash
+npm run deploy # an alias for `serverless dash deploy`
 ```
