@@ -34,7 +34,6 @@ function wrapTestFunction(test) {
 module.exports = function(kangaxTest) {
   var wrappedTest = wrapTestFunction(kangaxTest.exec);
 
-  kangaxTest.result = true;
   if (wrappedTest) {
     kangaxTest.calledFunction = wrappedTest;
     kangaxTest.result = getResult(wrappedTest);
@@ -42,6 +41,16 @@ module.exports = function(kangaxTest) {
 
   if (kangaxTest.hasOwnProperty('subtests')) {
     kangaxTest.subtests = kangaxTest.subtests.map(module.exports);
+  }
+
+  if (typeof kangaxTest.result === 'undefined' && kangaxTest.subtests) {
+    var summaryResult = true;
+    for (var i = 0; i < kangaxTest.subtests.length; i++) {
+      if (!kangaxTest.subtests[i].result) {
+        summaryResult = false;
+      }
+    }
+    kangaxTest.result = summaryResult;
   }
 
   return kangaxTest;
