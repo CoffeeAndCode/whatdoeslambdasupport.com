@@ -27,9 +27,9 @@
     "url": "https://github.com/CoffeeAndCode/whatdoeslambdasupport.com/issues"
   },
   "homepage": "https://github.com/CoffeeAndCode/whatdoeslambdasupport.com#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "eslint": "^2.7.0",
     "serverless": "github:serverless/serverless#master"
   }
 }

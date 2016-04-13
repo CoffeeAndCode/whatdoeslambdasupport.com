@@ -39,7 +39,16 @@
 
       <ul>
         {{#each tests}}
-          <li>{{#if error}}FAIL{{else}}SUCCESS{{/if}} - {{test}} : {{error.message}}</li>
+          <li>
+            {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+            {{#if subtests}}
+              <ul>
+              {{#each subtests}}
+                <li>{{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}</li>
+              {{/each}}
+              </ul>
+            {{/if}}
+          </li>
         {{/each}}
       </ul>
 

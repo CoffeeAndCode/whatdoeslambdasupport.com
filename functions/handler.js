@@ -4,31 +4,11 @@ var aws = require('aws-sdk');
 var handlebars = require('handlebars');
 var path = require('path');
 var readFileSync = require('fs').readFileSync;
-var tests = require('./tests');
+var es5Tests = require('compat-table/data-es6');
+var tester = require('./tester');
 
 module.exports.handler = function(functionPath, context) {
-  function catchError(method, errorClass, errorMessage) {
-    var capturedError;
-
-    try {
-      method();
-    } catch (error) {
-      capturedError = error;
-    }
-
-    return capturedError;
-  }
-
-  var testResults = Object.keys(tests).map(function(testFileName, index) {
-    var error = catchError(function() {
-      eval(readFileSync(path.join(__dirname, 'tests', testFileName)).toString());
-    });
-
-    return {
-      error: error,
-      test: tests[testFileName]
-    }
-  });
+  var testResults = es5Tests.tests.map(tester);
 
   var source = readFileSync(path.join(functionPath, 'templates', 'index.html.hbs'));
   var template = handlebars.compile(source.toString());

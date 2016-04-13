@@ -8,6 +8,7 @@
   "author": "Coffee and Code <info@coffeeandcode.com>",
   "license": "ISC",
   "dependencies": {
+    "compat-table": "github:kangax/compat-table#gh-pages",
     "handlebars": "^4.0.5"
   }
 }
