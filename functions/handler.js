@@ -4,17 +4,21 @@ var aws = require('aws-sdk');
 var handlebars = require('handlebars');
 var path = require('path');
 var readFileSync = require('fs').readFileSync;
-var es5Tests = require('compat-table/data-es6');
+var es5Tests = require('compat-table/data-es5');
+var es6Tests = require('compat-table/data-es6');
+var esnextTests = require('compat-table/data-esnext');
+var esintlTests = require('compat-table/data-esintl');
 var tester = require('./tester');
 
 module.exports.handler = function(functionPath, context) {
-  var testResults = es5Tests.tests.map(tester);
-
   var source = readFileSync(path.join(functionPath, 'templates', 'index.html.hbs'));
   var template = handlebars.compile(source.toString());
   var html = template({
     buildTime: new Date(),
-    tests: testResults
+    es5: es5Tests.tests.map(tester),
+    es6: es6Tests.tests.map(tester),
+    esnext: esnextTests.tests.map(tester),
+    esintl: esintlTests.tests.map(tester)
   });
 
   var s3 = new aws.S3();

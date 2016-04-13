@@ -37,8 +37,57 @@
 
       <iframe src="https://ghbtns.com/github-btn.html?user=coffeeandcode&repo=whatdoeslambdasupport.com&type=star&count=false&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
 
+      <h2>ES5 Features</h2>
       <ul>
-        {{#each tests}}
+        {{#each es5}}
+          <li>
+            {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+            {{#if subtests}}
+              <ul>
+              {{#each subtests}}
+                <li>{{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}</li>
+              {{/each}}
+              </ul>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+
+      <h2>ES6 Features</h2>
+      <ul>
+        {{#each es6}}
+          <li>
+            {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+            {{#if subtests}}
+              <ul>
+              {{#each subtests}}
+                <li>{{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}</li>
+              {{/each}}
+              </ul>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+
+      <h2>esnext Features</h2>
+      <ul>
+        {{#each esnext}}
+          <li>
+            {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+            {{#if subtests}}
+              <ul>
+              {{#each subtests}}
+                <li>{{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}</li>
+              {{/each}}
+              </ul>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+
+      <h2>esintl Features</h2>
+      <ul>
+        {{#each esintl}}
           <li>
             {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
             {{#if subtests}}
