@@ -48,6 +48,14 @@ function getTest(test) {
   }
 }
 
+function shouldAddStrictMode(kangaxTest) {
+  if (/^4\./.exec(process.versions.node) !== null &&
+    kangaxTest.res && kangaxTest.res.node4 === 'strict') {
+    return true;
+  }
+  return false;
+}
+
 // called by asyncTestPassed so we can update test result to be true
 /* eslint-disable no-unused-vars */
 function updateTestResults(testID) {
@@ -55,11 +63,13 @@ function updateTestResults(testID) {
 }
 /* eslint-enable no-unused-vars */
 
-function wrapTestFunction(testString) {
+function wrapTestFunction(testString, addStrictMode) {
+  var strict = addStrictMode ? "\"use strict\";\n" : '';
   // test is wrapped in multiline comments
   if (testString.match(/[^]*\/\*([^]*)\*\/\}$/)) {
-    return '(function (){' + deindent(testString.match(/[^]*\/\*([^]*)\*\/\}$/)[1]) + '})()';
+    return '(function (){' + strict + deindent(testString.match(/[^]*\/\*([^]*)\*\/\}$/)[1]) + '})()';
   } else {
+    if (addStrictMode) { throw new Error('Lazy developer didn\'t impliment.'); }
     return '(' + deindent(testString) + ')()';
   }
 }
@@ -72,7 +82,7 @@ module.exports = function(kangaxTest) {
 
   if (testString) {
     checkForAsyncTest(kangaxTest, ++testID, testString);
-    var wrappedTest = wrapTestFunction(testString);
+    var wrappedTest = wrapTestFunction(testString, shouldAddStrictMode(kangaxTest));
     kangaxTest.calledFunction = wrappedTest;
     kangaxTest.value = getResult(wrappedTest);
     kangaxTest.result = kangaxTest.value instanceof Error ? false : kangaxTest.value;
