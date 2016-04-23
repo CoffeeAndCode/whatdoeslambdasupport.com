@@ -18,6 +18,24 @@ function checkForAsyncTest(kangaxTest, testID, methodAsString) {
   }
 }
 
+function deindent(methodAsString) {
+  var lines = methodAsString.split("\n");
+  var indent = null;
+  lines = lines.map(function(line) {
+    if (indent === null) {
+      var leftTrimmedLine = line.replace(/^\s*/, '');
+      indent = line.length - leftTrimmedLine.length;
+      if (indent === 0) {
+        indent = null;
+      } else {
+        indent = Math.max(0, indent - 2);
+      }
+    }
+    return line[0] === ' ' ? line.substring(indent) : line;
+  });
+  return lines.join("\n");
+}
+
 function getResult(methodAsString) {
   return catchError(function() {
     return eval('function asyncTestPassed() { updateTestResults(' + testID + '); };' + "\n" + methodAsString);
@@ -40,9 +58,9 @@ function updateTestResults(testID) {
 function wrapTestFunction(testString) {
   // test is wrapped in multiline comments
   if (testString.match(/[^]*\/\*([^]*)\*\/\}$/)) {
-    return '(function (){' + testString.match(/[^]*\/\*([^]*)\*\/\}$/)[1] + '})()';
+    return '(function (){' + deindent(testString.match(/[^]*\/\*([^]*)\*\/\}$/)[1]) + '})()';
   } else {
-    return '(' + testString + ')()';
+    return '(' + deindent(testString) + ')()';
   }
 }
 
