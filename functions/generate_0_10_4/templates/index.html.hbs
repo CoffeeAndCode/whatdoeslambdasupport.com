@@ -42,10 +42,21 @@
         {{#each es5}}
           <li>
             {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+            {{#if calledFunction}}
+              <pre><code>{{calledFunction}}</code></pre>
+              <span>Result: {{value}}</span>
+            {{/if}}
+
             {{#if subtests}}
               <ul>
               {{#each subtests}}
-                <li>{{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}</li>
+                <li>
+                  {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+                  {{#if calledFunction}}
+                    <pre><code>{{calledFunction}}</code></pre>
+                    <span>Result: {{value}}</span>
+                  {{/if}}
+                </li>
               {{/each}}
               </ul>
             {{/if}}
@@ -58,10 +69,21 @@
         {{#each es6}}
           <li>
             {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+            {{#if calledFunction}}
+              <pre><code>{{calledFunction}}</code></pre>
+              <span>Result: {{value}}</span>
+            {{/if}}
+
             {{#if subtests}}
               <ul>
               {{#each subtests}}
-                <li>{{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}</li>
+                <li>
+                  {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+                  {{#if calledFunction}}
+                    <pre><code>{{calledFunction}}</code></pre>
+                    <span>Result: {{value}}</span>
+                  {{/if}}
+                </li>
               {{/each}}
               </ul>
             {{/if}}
@@ -74,10 +96,21 @@
         {{#each esnext}}
           <li>
             {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+            {{#if calledFunction}}
+              <pre><code>{{calledFunction}}</code></pre>
+              <span>Result: {{value}}</span>
+            {{/if}}
+
             {{#if subtests}}
               <ul>
               {{#each subtests}}
-                <li>{{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}</li>
+                <li>
+                  {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+                  {{#if calledFunction}}
+                    <pre><code>{{calledFunction}}</code></pre>
+                    <span>Result: {{value}}</span>
+                  {{/if}}
+                </li>
               {{/each}}
               </ul>
             {{/if}}
@@ -90,10 +123,21 @@
         {{#each esintl}}
           <li>
             {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+            {{#if calledFunction}}
+              <pre><code>{{calledFunction}}</code></pre>
+              <span>Result: {{value}}</span>
+            {{/if}}
+
             {{#if subtests}}
               <ul>
               {{#each subtests}}
-                <li>{{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}</li>
+                <li>
+                  {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
+                  {{#if calledFunction}}
+                    <pre><code>{{calledFunction}}</code></pre>
+                    <span>Result: {{value}}</span>
+                  {{/if}}
+                </li>
               {{/each}}
               </ul>
             {{/if}}

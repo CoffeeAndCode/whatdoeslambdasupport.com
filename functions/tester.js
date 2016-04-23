@@ -19,10 +19,9 @@ function checkForAsyncTest(kangaxTest, testID, methodAsString) {
 }
 
 function getResult(methodAsString) {
-  var result = catchError(function() {
-    return eval(methodAsString);
+  return catchError(function() {
+    return eval('function asyncTestPassed() { updateTestResults(' + testID + '); };' + "\n" + methodAsString);
   });
-  return result instanceof Error ? false : result;
 }
 
 function getTest(test) {
@@ -41,9 +40,9 @@ function updateTestResults(testID) {
 function wrapTestFunction(testString) {
   // test is wrapped in multiline comments
   if (testString.match(/[^]*\/\*([^]*)\*\/\}$/)) {
-    return 'function asyncTestPassed() { updateTestResults(' + testID + '); }; (function (){' + testString.match(/[^]*\/\*([^]*)\*\/\}$/)[1] + '})()';
+    return '(function (){' + testString.match(/[^]*\/\*([^]*)\*\/\}$/)[1] + '})()';
   } else {
-    return 'function asyncTestPassed() { updateTestResults(' + testID + '); }; (' + testString + ')()';
+    return '(' + testString + ')()';
   }
 }
 
@@ -57,7 +56,8 @@ module.exports = function(kangaxTest) {
     checkForAsyncTest(kangaxTest, ++testID, testString);
     var wrappedTest = wrapTestFunction(testString);
     kangaxTest.calledFunction = wrappedTest;
-    kangaxTest.result = getResult(wrappedTest);
+    kangaxTest.value = getResult(wrappedTest);
+    kangaxTest.result = kangaxTest.value instanceof Error ? false : kangaxTest.value;
     kangaxTest.testID = testID;
   }
 
