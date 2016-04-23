@@ -13,27 +13,29 @@ var tester = require('./tester');
 module.exports.handler = function(functionPath, context) {
   var source = readFileSync(path.join(functionPath, 'templates', 'index.html.hbs'));
   var template = handlebars.compile(source.toString());
-  var html = template({
+  var data = {
     buildTime: new Date(),
     es5: es5Tests.tests.map(tester),
     es6: es6Tests.tests.map(tester),
     esnext: esnextTests.tests.map(tester),
     esintl: esintlTests.tests.map(tester)
-  });
+  };
 
-  var s3 = new aws.S3();
-  s3.putObject({
-    ACL: 'public-read',
-    Body: html,
-    Bucket: process.env['S3_WEBSITE_BUCKET'],
-    ContentType: 'text/html',
-    Key: 'index.html'
-  }, function(error, data) {
-    if (error) console.log(error.message); // an error occurred
-    else     console.log(data);           // successful response
+  // Wait for async tests to complete for arbitrary amount of time.
+  setTimeout(function() {
+    var html = template(data);
+    var s3 = new aws.S3();
 
-    return context.done(null, {
-      message: 'Go Serverless! Your Lambda function executed successfully!'
+    s3.putObject({
+      ACL: 'public-read',
+      Body: html,
+      Bucket: process.env['S3_WEBSITE_BUCKET'],
+      ContentType: 'text/html',
+      Key: 'index.html'
+    }, function(error, data) {
+      if (error) { context.fail(error); }
+
+      return context.succeed(data);
     });
-  });
+  }, 1000);
 };
