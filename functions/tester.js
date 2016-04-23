@@ -85,22 +85,12 @@ module.exports = function(kangaxTest) {
     var wrappedTest = wrapTestFunction(testString, shouldAddStrictMode(kangaxTest));
     kangaxTest.calledFunction = wrappedTest;
     kangaxTest.value = getResult(wrappedTest);
-    kangaxTest.result = kangaxTest.value instanceof Error ? false : kangaxTest.value;
+    kangaxTest.result = kangaxTest.value instanceof Error ? false : Boolean(kangaxTest.value);
     kangaxTest.testID = testID;
   }
 
   if (kangaxTest.hasOwnProperty('subtests')) {
     kangaxTest.subtests = kangaxTest.subtests.map(module.exports);
-  }
-
-  if (typeof kangaxTest.result === 'undefined' && kangaxTest.subtests) {
-    var summaryResult = true;
-    for (var i = 0; i < kangaxTest.subtests.length; i++) {
-      if (!kangaxTest.subtests[i].result) {
-        summaryResult = false;
-      }
-    }
-    kangaxTest.result = summaryResult;
   }
 
   return kangaxTest;

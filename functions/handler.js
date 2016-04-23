@@ -10,6 +10,18 @@ var esnextTests = require('compat-table/data-esnext');
 var esintlTests = require('compat-table/data-esintl');
 var tester = require('./tester');
 
+function addSummaryResults(kangaxTest) {
+  if (typeof kangaxTest.result === 'undefined' && kangaxTest.subtests) {
+    var summaryResult = true;
+    for (var i = 0; i < kangaxTest.subtests.length; i++) {
+      if (!kangaxTest.subtests[i].result) {
+        summaryResult = false;
+      }
+    }
+    kangaxTest.result = summaryResult;
+  }
+}
+
 module.exports.handler = function(functionPath, context) {
   var source = readFileSync(path.join(functionPath, 'templates', 'index.html.hbs'));
   var template = handlebars.compile(source.toString());
@@ -23,6 +35,11 @@ module.exports.handler = function(functionPath, context) {
 
   // Wait for async tests to complete for arbitrary amount of time.
   setTimeout(function() {
+    data.es5.map(addSummaryResults);
+    data.es6.map(addSummaryResults);
+    data.esnext.map(addSummaryResults);
+    data.esintl.map(addSummaryResults);
+
     var html = template(data);
     var s3 = new aws.S3();
 
