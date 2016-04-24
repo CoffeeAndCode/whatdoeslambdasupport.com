@@ -31,7 +31,7 @@ module.exports.handler = function(functionPath, context) {
     es6: es6Tests.tests.map(tester),
     esnext: esnextTests.tests.map(tester),
     esintl: esintlTests.tests.map(tester),
-    testImportTime: require('tests/timestamp'),
+    testImportTime: require('./tests/timestamp')
   };
 
   // Wait for async tests to complete for arbitrary amount of time.
