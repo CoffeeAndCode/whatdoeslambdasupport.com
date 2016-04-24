@@ -41,3 +41,5 @@ admin.env
 
 #Ignore _meta folder
 _meta
+
+functions/tests/

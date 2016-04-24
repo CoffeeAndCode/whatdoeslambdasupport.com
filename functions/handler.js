@@ -4,10 +4,10 @@ var aws = require('aws-sdk');
 var handlebars = require('handlebars');
 var path = require('path');
 var readFileSync = require('fs').readFileSync;
-var es5Tests = require('compat-table/data-es5');
-var es6Tests = require('compat-table/data-es6');
-var esnextTests = require('compat-table/data-esnext');
-var esintlTests = require('compat-table/data-esintl');
+var es5Tests = require('./tests/data-es5');
+var es6Tests = require('./tests/data-es6');
+var esnextTests = require('./tests/data-esnext');
+var esintlTests = require('./tests/data-esintl');
 var tester = require('./tester');
 
 function addSummaryResults(kangaxTest) {

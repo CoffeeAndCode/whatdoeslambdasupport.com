@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "deploy": "serverless dash deploy",
+    "predeploy": "node import-test-files.js",
     "postinstall": "cd functions/generate && npm install",
     "serverless": "serverless",
     "start": "serverless function run generate",
@@ -30,6 +31,8 @@
   "dependencies": {},
   "devDependencies": {
     "eslint": "^2.7.0",
+    "object.assign": "^4.0.3",
+    "request": "^2.72.0",
     "serverless": "github:serverless/serverless#master"
   }
 }
