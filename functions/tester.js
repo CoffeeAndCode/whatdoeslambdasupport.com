@@ -15,6 +15,9 @@ function catchError(method) {
 function checkForAsyncTest(kangaxTest, testID, methodAsString) {
   if (/asyncTestPassed/.exec(methodAsString) !== null) {
     asyncTests[testID] = kangaxTest;
+    kangaxTest.async = true;
+  } else {
+    kangaxTest.async = false;
   }
 }
 
