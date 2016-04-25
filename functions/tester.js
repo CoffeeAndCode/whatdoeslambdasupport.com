@@ -59,6 +59,15 @@ function shouldAddStrictMode(kangaxTest) {
   return false;
 }
 
+function trimFunctionLines(methodAsString) {
+  var parts = methodAsString.split("\n");
+  if (parts.length >= 3) {
+    parts.pop();
+    parts.shift();
+  }
+  return parts.join("\n");
+}
+
 // called by asyncTestPassed so we can update test result to be true
 /* eslint-disable no-unused-vars */
 function updateTestResults(testID) {
@@ -67,13 +76,13 @@ function updateTestResults(testID) {
 /* eslint-enable no-unused-vars */
 
 function wrapTestFunction(testString, addStrictMode) {
-  var strict = addStrictMode ? "\"use strict\";\n" : '';
+  var strict = addStrictMode ? "\n  \"use strict\";" : '';
   // test is wrapped in multiline comments
   if (testString.match(/[^]*\/\*([^]*)\*\/\}$/)) {
     return '(function (){' + strict + deindent(testString.match(/[^]*\/\*([^]*)\*\/\}$/)[1]) + '})()';
   } else {
-    if (addStrictMode) { throw new Error('Lazy developer didn\'t impliment.'); }
-    return '(' + deindent(testString) + ')()';
+    if (strict === '') { strict = "\n"; }
+    return '(function (){' + strict + deindent(trimFunctionLines(testString)) + "\n})()";
   }
 }
 
