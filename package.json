@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/CoffeeAndCode/whatdoeslambdasupport.com#readme",
   "devDependencies": {
+    "aws-auth-helper": "0.0.2",
     "eslint": "^2.7.0",
     "request": "^2.72.0",
     "serverless": "^0.5.5"
