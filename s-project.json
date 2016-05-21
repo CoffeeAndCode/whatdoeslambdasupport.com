@@ -1,5 +1,7 @@
 {
   "name": "whatdoeslambdasupport",
   "custom": {},
-  "plugins": []
+  "plugins": [
+    "serverless-optimizer-plugin"
+  ]
 }

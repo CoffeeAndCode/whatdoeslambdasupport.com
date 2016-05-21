@@ -14,4 +14,4 @@ getTestFile('data-es5.js');
 getTestFile('data-es6.js');
 getTestFile('data-esintl.js');
 getTestFile('data-esnext.js');
-fs.writeFile(path.join('functions/tests', 'timestamp.js'), 'module.exports = "' + new Date() + '";');
+fs.writeFile(path.join('functions/tests', 'timestamp.json'), '{ "testsFrom": "' + new Date() + '" }');

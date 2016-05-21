@@ -4,12 +4,13 @@
   "description": "Serverless Lambda function for project: whatdoeslambdasupport",
   "customName": false,
   "customRole": false,
-  "handler": "generate_0_10_4/handler.handler",
+  "handler": "handler.handler",
   "timeout": 30,
   "memorySize": 128,
   "authorizer": {},
   "custom": {
-    "excludePatterns": []
+    "excludePatterns": [],
+    "optimize": true
   },
   "endpoints": [],
   "events": [{

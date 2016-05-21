@@ -2,13 +2,12 @@
 
 var aws = require('aws-sdk');
 var handlebars = require('handlebars');
-var path = require('path');
-var readFileSync = require('fs').readFileSync;
 var es5Tests = require('./tests/data-es5');
 var es6Tests = require('./tests/data-es6');
 var esnextTests = require('./tests/data-esnext');
 var esintlTests = require('./tests/data-esintl');
 var tester = require('./tester');
+var timestamp = require('./tests/timestamp.json');
 
 function addSummaryResults(kangaxTest) {
   if (typeof kangaxTest.result === 'undefined' && kangaxTest.subtests) {
@@ -22,8 +21,7 @@ function addSummaryResults(kangaxTest) {
   }
 }
 
-module.exports.handler = function(functionPath, context) {
-  var source = readFileSync(path.join(functionPath, 'templates', 'index.html.hbs'));
+module.exports.handler = function(source, context) {
   var template = handlebars.compile(source.toString());
   var data = {
     buildTime: new Date(),
@@ -31,7 +29,7 @@ module.exports.handler = function(functionPath, context) {
     es6: es6Tests.tests.map(tester),
     esnext: esnextTests.tests.map(tester),
     esintl: esintlTests.tests.map(tester),
-    testImportTime: require('./tests/timestamp')
+    testImportTime: timestamp.testsFrom
   };
 
   // Wait for async tests to complete for arbitrary amount of time.
