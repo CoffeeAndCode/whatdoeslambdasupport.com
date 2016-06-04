@@ -1,0 +1,29 @@
+<li class="{{#if result}}test-passed{{else}}test-failed{{/if}}">
+  <h3 class="name">{{name}}</h3>
+
+  {{#if calledFunction}}
+    <div class="additional-information">
+      <p>This test was {{#if async}}{{else}}not{{/if}} asynchronous and returned
+        the following code: <code>{{value}}</code></p>
+      <pre class="code"><code>{{calledFunction}}</code></pre>
+    </div>
+  {{/if}}
+
+  {{#if subtests}}
+    <ul class="subtests">
+    {{#each subtests}}
+      <li class="{{#if result}}test-passed{{else}}test-failed{{/if}}">
+        <h4 class="name">{{name}}</h4>
+
+        {{#if calledFunction}}
+          <div class="additional-information">
+            <p>This test was {{#if async}}{{else}}not{{/if}} asynchronous and returned
+              the following: <code>{{value}}</code></p>
+            <pre class="code"><code>{{calledFunction}}</code></pre>
+          </div>
+        {{/if}}
+      </li>
+    {{/each}}
+    </ul>
+  {{/if}}
+</li>

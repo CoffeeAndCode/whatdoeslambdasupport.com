@@ -30,6 +30,7 @@ module.exports.handler = function(functionPath, context, templateData) {
       return options.inverse(this);
     }
   });
+  handlebars.registerPartial('test-result', readFileSync(path.join(__dirname, 'templates', '_test-result.html.hbs')).toString());
 
   var source = readFileSync(path.join(__dirname, 'templates', 'index.html.hbs'));
   var template = handlebars.compile(source.toString());
@@ -52,6 +53,7 @@ module.exports.handler = function(functionPath, context, templateData) {
 
     var html = template(data);
     var s3 = new aws.S3();
+    var filesSaved = 0;
 
     s3.putObject({
       ACL: 'public-read',
@@ -62,7 +64,25 @@ module.exports.handler = function(functionPath, context, templateData) {
     }, function(error, data) {
       if (error) { context.fail(error); }
 
-      return context.succeed(data);
+      filesSaved++;
+      if (filesSaved === 2) {
+        return context.succeed(data);
+      }
+    });
+
+    s3.putObject({
+      ACL: 'public-read',
+      Body: readFileSync(path.join(__dirname, 'assets', 'style.css')).toString(),
+      Bucket: process.env['S3_WEBSITE_BUCKET'],
+      ContentType: 'text/css',
+      Key: 'style.css'
+    }, function(error, data) {
+      if (error) { context.fail(error); }
+
+      filesSaved++;
+      if (filesSaved === 2) {
+        return context.succeed(data);
+      }
     });
   }, 1000);
 };

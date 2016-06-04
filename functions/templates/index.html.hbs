@@ -9,6 +9,7 @@
     <meta name="keywords" content="aws, lambda, node.js, javascript, support">
     <meta name="author" content="Coffee and Code">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <nav class="navbar navbar-inverse">
@@ -20,7 +21,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Versions</a>
+          <a class="navbar-brand" href="#">Node Versions</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -37,130 +38,77 @@
 
       <iframe src="https://ghbtns.com/github-btn.html?user=coffeeandcode&repo=whatdoeslambdasupport.com&type=star&count=false&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
 
-      <h2>ES5 Features</h2>
-      <ul>
-        {{#each es5}}
-          <li>
-            {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
-            {{#if calledFunction}}
-              <pre><code>{{calledFunction}}</code></pre>
-              <span>Result: {{value}}</span>
-              <span>Async: {{async}}</span>
-            {{/if}}
+      <p class="description">Trying to figure out what JavaScript features are supported or not in
+        different versions of Node is no fun. We run the same tests found in the
+        <a href="http://kangax.github.io/compat-table/">Kangax test suite</a>
+        in each AWS Lambda runtime to produce these test results. No more guessing.</p>
 
-            {{#if subtests}}
-              <ul>
-              {{#each subtests}}
-                <li>
-                  {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
-                  {{#if calledFunction}}
-                    <pre><code>{{calledFunction}}</code></pre>
-                    <span>Result: {{value}}</span>
-                    <span>Async: {{async}}</span>
-                  {{/if}}
-                </li>
-              {{/each}}
-              </ul>
-            {{/if}}
-          </li>
+      <p>Tests are usually broken down by test suite, group, and then specific
+        test. The quickest way to find a specific feature is to use your
+        browser's "find" feature.</p>
+
+      <p>If you roll over the test's name it will display additional
+        information such as the code that was ran, whether the test is asynchronous,
+        and what result was returned from the method call or error captured.
+        A group of tests is considered failing if any of its subtests fail.</p>
+
+      <p>If you find any errors or omissions, please
+        <a href="https://github.com/CoffeeAndCode/whatdoeslambdasupport.com/issues">file an issue on Github</a>.</p>
+
+      <p>For an in depth look at what features are available across the major Node
+          releases and browser support, check out <a href="http://node.green/">node.green</a> and the
+          <a href="http://kangax.github.io/compat-table/">Kangax compatibility tables</a>.</p>
+
+      <hr>
+
+      <label for="display-all-info">
+        <input id="display-all-info" type="checkbox">
+        Display all test information
+      </label>
+
+      <script>
+        document.getElementById('display-all-info').addEventListener('change', function(event) {
+          if (event.target.checked) {
+            document.body.classList.add('display-all-info')
+          } else {
+            document.body.classList.remove('display-all-info')
+          }
+        });
+      </script>
+
+      <h2>ES5 Features</h2>
+      <ul class="tests">
+        {{#each es5}}
+          {{> test-result}}
         {{/each}}
       </ul>
 
       <h2>ES6 Features</h2>
-      <ul>
+      <ul class="tests">
         {{#each es6}}
-          <li>
-            {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
-            {{#if calledFunction}}
-              <pre><code>{{calledFunction}}</code></pre>
-              <span>Result: {{value}}</span>
-              <span>Async: {{async}}</span>
-            {{/if}}
-
-            {{#if subtests}}
-              <ul>
-              {{#each subtests}}
-                <li>
-                  {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
-                  {{#if calledFunction}}
-                    <pre><code>{{calledFunction}}</code></pre>
-                    <span>Result: {{value}}</span>
-                    <span>Async: {{async}}</span>
-                  {{/if}}
-                </li>
-              {{/each}}
-              </ul>
-            {{/if}}
-          </li>
+          {{> test-result}}
         {{/each}}
       </ul>
 
       <h2>esnext Features</h2>
-      <ul>
+      <ul class="tests">
         {{#each esnext}}
-          <li>
-            {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
-            {{#if calledFunction}}
-              <pre><code>{{calledFunction}}</code></pre>
-              <span>Result: {{value}}</span>
-              <span>Async: {{async}}</span>
-            {{/if}}
-
-            {{#if subtests}}
-              <ul>
-              {{#each subtests}}
-                <li>
-                  {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
-                  {{#if calledFunction}}
-                    <pre><code>{{calledFunction}}</code></pre>
-                    <span>Result: {{value}}</span>
-                    <span>Async: {{async}}</span>
-                  {{/if}}
-                </li>
-              {{/each}}
-              </ul>
-            {{/if}}
-          </li>
+          {{> test-result}}
         {{/each}}
       </ul>
 
       <h2>esintl Features</h2>
-      <ul>
+      <ul class="tests">
         {{#each esintl}}
-          <li>
-            {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
-            {{#if calledFunction}}
-              <pre><code>{{calledFunction}}</code></pre>
-              <span>Result: {{value}}</span>
-              <span>Async: {{async}}</span>
-            {{/if}}
-
-            {{#if subtests}}
-              <ul>
-              {{#each subtests}}
-                <li>
-                  {{#if result}}SUCCESS{{else}}FAIL{{/if}} - {{name}}
-                  {{#if calledFunction}}
-                    <pre><code>{{calledFunction}}</code></pre>
-                    <span>Result: {{value}}</span>
-                    <span>Async: {{async}}</span>
-                  {{/if}}
-                </li>
-              {{/each}}
-              </ul>
-            {{/if}}
-          </li>
+          {{> test-result}}
         {{/each}}
       </ul>
-
-      <p>For an in depth look at what features are available across the major Node
-        releases, check out <a href="http://node.green/">node.green</a> and the <a href="http://kangax.github.io/compat-table/">Kangax compatibility tables</a>.</p>
     </div>
 
     <footer>
       <div class="container">
-        <p>Made with love by the web consultants at <a href="http://www.coffeeandcode.com/?utm_source=whatdoeslambdasupport.com&utm_medium=footer_link&utm_campaign=open_source">Coffee and Code</a>.
-          Last built on {{buildTime}} with tests from {{testImportTime}}.</p>
+        <p><em>Made with love by the web consultants at <a href="http://www.coffeeandcode.com/?utm_source=whatdoeslambdasupport.com&utm_medium=footer_link&utm_campaign=open_source">Coffee and Code</a>.</em></p>
+        <p class="build-info">Last built on {{buildTime}} with tests from {{testImportTime}}.</p>
       </div>
     </footer>
 
