@@ -22,8 +22,16 @@ function addSummaryResults(kangaxTest) {
   }
 }
 
-module.exports.handler = function(functionPath, context) {
-  var source = readFileSync(path.join(functionPath, 'templates', 'index.html.hbs'));
+module.exports.handler = function(functionPath, context, templateData) {
+  handlebars.registerHelper('ifEqual', function(conditional, comparator, options) {
+    if (conditional === comparator) {
+      return options.fn(this);
+    } else {
+      return options.inverse(this);
+    }
+  });
+
+  var source = readFileSync(path.join(__dirname, 'templates', 'index.html.hbs'));
   var template = handlebars.compile(source.toString());
   var data = {
     buildTime: new Date(),
@@ -31,6 +39,7 @@ module.exports.handler = function(functionPath, context) {
     es6: es6Tests.tests.map(tester),
     esnext: esnextTests.tests.map(tester),
     esintl: esintlTests.tests.map(tester),
+    meta: templateData,
     testImportTime: require('./tests/timestamp')
   };
 
