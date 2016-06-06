@@ -66,16 +66,6 @@
         Display all test information
       </label>
 
-      <script>
-        document.getElementById('display-all-info').addEventListener('change', function(event) {
-          if (event.target.checked) {
-            document.body.classList.add('display-all-info')
-          } else {
-            document.body.classList.remove('display-all-info')
-          }
-        });
-      </script>
-
       <h2>ES5 Features</h2>
       <ul class="tests">
         {{#each es5}}
@@ -119,6 +109,32 @@
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
       ga('create', 'UA-43185016-7', 'auto');
       ga('send', 'pageview');
+    </script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function() {
+        $('#display-all-info').on('change', function(event) {
+          if (event.target.checked) {
+            $('body').addClass('display-all-info');
+          } else {
+            $('body').removeClass('display-all-info');
+          }
+        });
+
+        $('body').on('click', '.tests .info-toggle-link', function(event) {
+          event.preventDefault();
+          var $target = $(event.target);
+          var $info = $target.closest('li').find('.additional-information');
+
+          if ($target.text() === '[+]') {
+            $target.text('[-]');
+            $info.addClass('show');
+          } else {
+            $target.text('[+]');
+            $info.removeClass('show');
+          }
+        });
+      });
     </script>
   </body>
 </html>

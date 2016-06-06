@@ -17,17 +17,37 @@ footer {
   padding-bottom: 3px;
 }
 
-.tests li:hover > .additional-information {
-  display: block;
-}
-
 .subtests .name {
   border-bottom: none;
   color: #555;
   font-size: 1.3rem;
   font-weight: normal;
+  line-height: 1.6;
   margin: 4px 0;
-  padding: bottom: 0;
+  padding-bottom: 0;
+}
+
+.status {
+  background-color: pink;
+  color: white;
+  display: inline-block;
+  left: 0;
+  padding: 5px 10px;
+  position: absolute;
+  top: 0;
+}
+
+.subtests .status {
+  font-size: 1rem;
+  padding: 2px 10px;
+}
+
+.test-failed .status {
+  background-color: red;
+}
+
+.test-passed .status {
+  background-color: green;
 }
 
 .additional-information {
@@ -35,6 +55,7 @@ footer {
   padding: 0 0 20px 20px;
 }
 
+.additional-information.show,
 .display-all-info .additional-information {
   display: block;
 }
@@ -49,13 +70,13 @@ pre code {
 
 .test-failed .name {
   border-bottom-color: red;
-  border-left: 10px solid red;
+  margin-left: 30px;
   padding-left: 10px;
 }
 
 .test-passed .name {
   border-bottom-color: green;
-  border-left: 10px solid green;
+  margin-left: 30px;
   padding-left: 10px;
 }
 
@@ -64,4 +85,8 @@ pre code {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.tests li {
+  position: relative;
 }
