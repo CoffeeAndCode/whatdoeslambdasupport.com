@@ -172,62 +172,6 @@
         ]
       },
       "DependsOn": ["RootBucket", "Route53HostedZone", "v0104Bucket", "WWWBucket"]
-    },
-    "WebsiteHealthIndexFileCheck": {
-      "Type": "AWS::Route53::HealthCheck",
-      "Properties": {
-        "HealthCheckConfig": {
-          "Port": "80",
-          "Type": "HTTP",
-          "ResourcePath": {"Fn::Join": ["", ["/", {"Ref":"IndexDocument"}]]},
-          "FullyQualifiedDomainName": {"Ref": "RootDomainName"},
-          "RequestInterval": "30",
-          "FailureThreshold": "3"
-        }
-      },
-      "DependsOn": "RootBucket"
-    },
-    "WebsiteHealthErrorFileCheck": {
-      "Type": "AWS::Route53::HealthCheck",
-      "Properties": {
-        "HealthCheckConfig": {
-          "Port": "80",
-          "Type": "HTTP",
-          "ResourcePath": {"Fn::Join": ["", ["/", {"Ref":"ErrorDocument"}]]},
-          "FullyQualifiedDomainName": {"Ref": "RootDomainName"},
-          "RequestInterval": "30",
-          "FailureThreshold": "3"
-        }
-      },
-      "DependsOn": "RootBucket"
-    },
-    "WebsiteHealthIndexFileCheckv0104": {
-      "Type": "AWS::Route53::HealthCheck",
-      "Properties": {
-        "HealthCheckConfig": {
-          "Port": "80",
-          "Type": "HTTP",
-          "ResourcePath": {"Fn::Join": ["", ["/", {"Ref":"IndexDocument"}]]},
-          "FullyQualifiedDomainName": {"Fn::Join": [".", ["v0-10-4", {"Ref":"RootDomainName"}]]},
-          "RequestInterval": "30",
-          "FailureThreshold": "3"
-        }
-      },
-      "DependsOn": "v0104Bucket"
-    },
-    "WebsiteHealthErrorFileCheckv0104": {
-      "Type": "AWS::Route53::HealthCheck",
-      "Properties": {
-        "HealthCheckConfig": {
-          "Port": "80",
-          "Type": "HTTP",
-          "ResourcePath": {"Fn::Join": ["", ["/", {"Ref":"ErrorDocument"}]]},
-          "FullyQualifiedDomainName": {"Fn::Join": [".", ["v0-10-4", {"Ref":"RootDomainName"}]]},
-          "RequestInterval": "30",
-          "FailureThreshold": "3"
-        }
-      },
-      "DependsOn": "v0104Bucket"
     }
   },
   "Outputs": {
