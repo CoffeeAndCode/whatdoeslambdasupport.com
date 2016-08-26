@@ -70,6 +70,22 @@ module.exports.handler = function(functionPath, context, templateData) {
       }
     });
 
+    var errorPage = readFileSync(path.join(__dirname, 'templates', '404.html.hbs'));
+    s3.putObject({
+      ACL: 'public-read',
+      Body: handlebars.compile(errorPage.toString())(data),
+      Bucket: process.env['S3_WEBSITE_BUCKET'],
+      ContentType: 'text/html',
+      Key: '404.html'
+    }, function(error, data) {
+      if (error) { context.fail(error); }
+
+      filesSaved++;
+      if (filesSaved === 2) {
+        return context.succeed(data);
+      }
+    });
+
     s3.putObject({
       ACL: 'public-read',
       Body: readFileSync(path.join(__dirname, 'assets', 'style.css')).toString(),
