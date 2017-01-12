@@ -1,5 +1,5 @@
 <li class="{{#if result}}test-passed{{else}}test-failed{{/if}}">
-  <h3 class="name">{{name}}{{#if calledFunction}} <a class="info-toggle-link" href="javascript:void(0);">[+]</a>{{/if}}</h3>
+  <h3 id="{{anchorify name}}" class="name"><a href="#{{anchorify name}}">{{name}}</a>{{#if calledFunction}} <a class="info-toggle-link" href="javascript:void(0);">[+]</a>{{/if}}</h3>
   <p class="status">{{#if result}}✔{{else}}✖{{/if}}</p>
 
   {{#if calledFunction}}
