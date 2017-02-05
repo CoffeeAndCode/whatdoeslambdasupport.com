@@ -10,6 +10,7 @@ function getTestFile(fileName) {
   request(testFileBaseURL + fileName).pipe(fs.createWriteStream(path.join('functions/tests', fileName)));
 }
 
+getTestFile('data-common.json');
 getTestFile('data-es5.js');
 getTestFile('data-es6.js');
 getTestFile('data-esintl.js');
