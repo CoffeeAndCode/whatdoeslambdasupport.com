@@ -15,4 +15,4 @@ getTestFile('data-es6.js');
 getTestFile('data-esintl.js');
 getTestFile('data-esnext.js');
 getTestFile('esnext-browsers.js');
-fs.writeFile(path.join('functions/tests', 'timestamp.js'), 'module.exports = "' + new Date() + '";');
+fs.writeFileSync(path.join('functions/tests', 'timestamp.js'), 'module.exports = "' + new Date() + '";');
