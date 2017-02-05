@@ -30,6 +30,9 @@ module.exports.handler = function(functionPath, context, templateData) {
       return options.inverse(this);
     }
   });
+  handlebars.registerHelper('anchorify', function (str) {
+    return str.replace(/\s+/g, '-').replace(/[^a-z0-9_-]/gi, '');
+  });
   handlebars.registerPartial('test-result', readFileSync(path.join(__dirname, 'templates', '_test-result.html.hbs')).toString());
 
   var source = readFileSync(path.join(__dirname, 'templates', 'index.html.hbs'));
