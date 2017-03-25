@@ -11,7 +11,7 @@
     "deploy:package": "aws cloudformation package --template-file template.processed.yml --output-template-file template.deployed.yml --s3-bucket deploy.whatdoeslambdasupport.com",
     "deploy:processTemplate": "node bin/processTemplate.js",
     "deploy:s3": "aws s3 mb s3://deploy.whatdoeslambdasupport.com --region us-east-1",
-    "lint": "eslint --ignore-pattern 'app/tests' .",
+    "lint": "eslint --ignore-pattern 'app/node_modules' --ignore-pattern 'app/tests' .",
     "test": "rm -rf dist/ && yarn deploy:importTestFiles && yarn deploy:installAppDependencies && node index.js"
   },
   "repository": {
