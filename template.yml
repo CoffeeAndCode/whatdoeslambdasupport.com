@@ -1,0 +1,87 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: >-
+  whatdoeslambdasupport.com
+Resources:
+  FourThree:
+    Type: 'AWS::Serverless::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs4.3
+      CodeUri: ./app
+      Description: >-
+        WDLS 4.3
+      MemorySize: 128
+      Timeout: 10
+      Role:
+        'Fn::GetAtt': [ LambdaRole, Arn ]
+      Environment:
+        Variables:
+          IS_DEFAULT_RUNTIME: 'FALSE'
+          S3_WEBSITE_BUCKET: !env S3_WEBSITE_BUCKET
+
+  SixTen:
+    Type: 'AWS::Serverless::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: ./app
+      Description: >-
+        WDLS 6.10
+      MemorySize: 128
+      Timeout: 10
+      Role:
+        'Fn::GetAtt': [ LambdaRole, Arn ]
+      Environment:
+        Variables:
+          IS_DEFAULT_RUNTIME: 'TRUE'
+          S3_WEBSITE_BUCKET: !env S3_WEBSITE_BUCKET
+
+  LambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Path: '/'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Sid: AllowLambdaServiceToAssumeRole
+            Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+
+  S3AccessPolicy:
+    Type: 'AWS::IAM::Policy'
+    DependsOn:
+      - LambdaRole
+      - Website
+    Properties:
+      PolicyName: WDLS_S3Policy
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Allow
+            Action:
+              - s3:PutObject
+              - s3:PutObjectAcl
+            Resource:
+              - 'Fn::Join': [ '', [ 'arn:aws:s3:::', !env S3_WEBSITE_BUCKET, '/*' ] ]
+      Roles:
+        - Ref: LambdaRole
+
+  Website:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !env S3_WEBSITE_BUCKET
+      WebsiteConfiguration:
+        ErrorDocument: 404.html
+        IndexDocument: index.html

@@ -12,20 +12,33 @@ releases, check out [node.green](http://node.green/) and the
 
 ## Development
 
-This project uses [serverless](http://www.serverless.com) to manage the AWS
-Lambda setup and deployment. It's setup as an NPM script that you can run with
-a command prefix of `npm run serverless [command] [arguments]`. You will need to
-use a newer version of Node to allow the `serverless` application to run any
-commands though.
-
-You can run the Lambda function locally with:
+This project uses [dotenv](https://www.npmjs.com/package/dotenv) to
+keep environment variables out of source control. A `.env` file
+in the root of the project must have the following:
 
 ```bash
-npm start # an alias for `serverless function run generate`
+S3_WEBSITE_BUCKET=my.bucket.name # s3 bucket to deploy compiled web files to
 ```
 
-and bring up the Serverless deployment dashboard with:
+_Note: Make sure to remove any comments from the `.env` file as they
+are not supported._
 
-```bash
-npm run deploy # an alias for `serverless dash deploy`
-```
+You can test the creation of files using your current version of Node by
+running `yarn run test` from the root of the project.
+
+
+## Deployment
+
+The project uses a [SAM](https://github.com/awslabs/serverless-application-model)
+template for AWS to setup API endpoints and Lambda functions our
+workflow utilizes.
+
+You can deploy the project with `yarn deploy` which will:
+
+- download the latest tests from Kangax compatibility table
+- create an S3 bucket specified in `package.json` to hold your deployment artifacts
+- prepare a CloudFront changeset template
+- initiate the changeset on your behalf
+
+The changeset will create the S3 bucket used to host the web files from. It is
+the same bucket specified by `S3_WEBSITE_BUCKET` in the `.env` file.

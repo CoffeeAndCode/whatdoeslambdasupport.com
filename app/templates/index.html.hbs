@@ -12,26 +12,7 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Node Versions</a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li {{#ifEqual meta.version 'v4.3.2'}}class="active"{{/ifEqual}}><a href="http://whatdoeslambdasupport.com/">v4.3.2 <span class="sr-only">(current)</span></a></li>
-            <li {{#ifEqual meta.version 'v0.10.4'}}class="active"{{/ifEqual}}><a href="http://v0-10-4.whatdoeslambdasupport.com/">v0.10.4</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    {{> menu }}
 
     <div class="container">
       <h1>{{meta.title}}</h1>
@@ -52,7 +33,7 @@
         and what result was returned from the method call or error captured.
         A group of tests is considered failing if any of its subtests fail.</p>
 
-        <p>The source for this site is available on GitHub at 
+        <p>The source for this site is available on GitHub at
           <a href="https://github.com/CoffeeAndCode/whatdoeslambdasupport.com">CoffeeAndCode/whatdoeslambdasupport.com</a>.
           If you find any errors, omissions, or otherwise have suggestions please
           <a href="https://github.com/CoffeeAndCode/whatdoeslambdasupport.com/issues">file an issue on GitHub</a>.</p>
