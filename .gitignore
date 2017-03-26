@@ -3,5 +3,4 @@
 !/app/tests/.gitkeep
 /dist/
 /template.deployed.yml
-/template.processed.yml
 node_modules/

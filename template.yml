@@ -2,6 +2,14 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: >-
   whatdoeslambdasupport.com
+
+Parameters:
+  WebsiteBucketName:
+    Type: String
+    Default: www.whatdoeslambdasupport.com
+    Description: The S3 bucket to use for hosting the web files.
+    MinLength: 1
+
 Resources:
   FourThree:
     Type: 'AWS::Serverless::Function'
@@ -18,7 +26,7 @@ Resources:
       Environment:
         Variables:
           IS_DEFAULT_RUNTIME: 'FALSE'
-          S3_WEBSITE_BUCKET: !env S3_WEBSITE_BUCKET
+          S3_WEBSITE_BUCKET: !Ref WebsiteBucketName
 
   SixTen:
     Type: 'AWS::Serverless::Function'
@@ -35,7 +43,7 @@ Resources:
       Environment:
         Variables:
           IS_DEFAULT_RUNTIME: 'TRUE'
-          S3_WEBSITE_BUCKET: !env S3_WEBSITE_BUCKET
+          S3_WEBSITE_BUCKET: !Ref WebsiteBucketName
 
   LambdaRole:
     Type: 'AWS::IAM::Role'
@@ -71,7 +79,7 @@ Resources:
               - s3:PutObject
               - s3:PutObjectAcl
             Resource:
-              - !Join [ '', [ 'arn:aws:s3:::', !env S3_WEBSITE_BUCKET, '/*' ] ]
+              - !Join [ '', [ 'arn:aws:s3:::', !Ref WebsiteBucketName, '/*' ] ]
       Roles:
         - !Ref LambdaRole
 
@@ -79,7 +87,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
-      BucketName: !env S3_WEBSITE_BUCKET
+      BucketName: !Ref WebsiteBucketName
       WebsiteConfiguration:
         ErrorDocument: 404.html
         IndexDocument: index.html
