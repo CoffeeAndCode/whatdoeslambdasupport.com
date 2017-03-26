@@ -14,8 +14,7 @@ Resources:
         WDLS 4.3
       MemorySize: 128
       Timeout: 10
-      Role:
-        'Fn::GetAtt': [ LambdaRole, Arn ]
+      Role: !GetAtt LambdaRole.Arn
       Environment:
         Variables:
           IS_DEFAULT_RUNTIME: 'FALSE'
@@ -32,8 +31,7 @@ Resources:
         WDLS 6.10
       MemorySize: 128
       Timeout: 10
-      Role:
-        'Fn::GetAtt': [ LambdaRole, Arn ]
+      Role: !GetAtt LambdaRole.Arn
       Environment:
         Variables:
           IS_DEFAULT_RUNTIME: 'TRUE'
@@ -73,9 +71,9 @@ Resources:
               - s3:PutObject
               - s3:PutObjectAcl
             Resource:
-              - 'Fn::Join': [ '', [ 'arn:aws:s3:::', !env S3_WEBSITE_BUCKET, '/*' ] ]
+              - !Join [ '', [ 'arn:aws:s3:::', !env S3_WEBSITE_BUCKET, '/*' ] ]
       Roles:
-        - Ref: LambdaRole
+        - !Ref LambdaRole
 
   Website:
     Type: AWS::S3::Bucket
