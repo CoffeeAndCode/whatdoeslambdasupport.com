@@ -4,6 +4,10 @@ Description: >-
   whatdoeslambdasupport.com
 
 Parameters:
+  DeploymentTime:
+    Type: String
+    Description: Time of the deployment needed to force custom function exectution.
+
   WebsiteBucketName:
     Type: String
     Default: www.whatdoeslambdasupport.com
@@ -17,7 +21,7 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: nodejs4.3
-      CodeUri: ./app
+      CodeUri: ./functions/app
       Description: >-
         WDLS 4.3
       MemorySize: 128
@@ -34,7 +38,7 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: nodejs6.10
-      CodeUri: ./app
+      CodeUri: ./functions/app
       Description: >-
         WDLS 6.10
       MemorySize: 128
@@ -46,22 +50,80 @@ Resources:
           S3_WEBSITE_BUCKET: !Ref WebsiteBucketName
 
   LambdaRole:
-    Type: 'AWS::IAM::Role'
+    Type: AWS::IAM::Role
     Properties:
-      Path: '/'
+      Path: /
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
           -
-            Sid: AllowLambdaServiceToAssumeRole
             Effect: Allow
             Action:
               - sts:AssumeRole
             Principal:
               Service:
                 - lambda.amazonaws.com
+
+  FunctionExecutor:
+    Type: 'Custom::FunctionExecutor'
+    DependsOn:
+      - ExecuteFunction
+      - FourThree
+      - SixTen
+    Properties:
+      ServiceToken: !GetAtt ExecuteFunction.Arn
+      DeploymentTime: !Ref DeploymentTime
+      Functions:
+        - !GetAtt FourThree.Arn
+        - !GetAtt SixTen.Arn
+
+  ExecuteFunction:
+    Type: 'AWS::Serverless::Function'
+    DependsOn: ExecuteFunctionRole
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: ./functions/executor
+      Description: >-
+        WDLS function executor during CloudFormation
+      MemorySize: 128
+      Timeout: 10
+      Role: !GetAtt ExecuteFunctionRole.Arn
+
+  ExecuteFunctionRole:
+    Type: AWS::IAM::Role
+    DependsOn:
+      - FourThree
+      - SixTen
+    Properties:
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      Policies:
+        -
+          PolicyName: InvokeLambdaFunctions
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            -
+              Effect: Allow
+              Action:
+                - lambda:InvokeFunction
+              Resource:
+                - !GetAtt FourThree.Arn
+                - !GetAtt SixTen.Arn
 
   S3AccessPolicy:
     Type: 'AWS::IAM::Policy'

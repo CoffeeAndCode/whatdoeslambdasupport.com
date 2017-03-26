@@ -73,11 +73,11 @@ module.exports.handler = function(event, context, callback) {
     var filesSaved = 0;
 
     if (process.env.OUTPUT_TO_FOLDER) {
-      var outputFolder = path.join(__dirname, '..', process.env.OUTPUT_TO_FOLDER);
+      var outputFolder = path.join(__dirname, '../..', process.env.OUTPUT_TO_FOLDER);
       if (!fs.existsSync(outputFolder)) {
         fs.mkdirSync(outputFolder);
       }
-      fs.writeFileSync(path.join(__dirname, '../', process.env.OUTPUT_TO_FOLDER, 'index.html'), html);
+      fs.writeFileSync(path.join(__dirname, '../..', process.env.OUTPUT_TO_FOLDER, 'index.html'), html);
     } else {
       if (process.env.IS_DEFAULT_RUNTIME === 'TRUE') {
         s3.putObject({
@@ -114,9 +114,9 @@ module.exports.handler = function(event, context, callback) {
 
     var errorPage = readFileSync(path.join(__dirname, 'templates', '404.html.hbs'));
     if (process.env.OUTPUT_TO_FOLDER) {
-      fs.writeFileSync(path.join(__dirname, '../', process.env.OUTPUT_TO_FOLDER, '404.html'), handlebars.compile(errorPage.toString())(data));
+      fs.writeFileSync(path.join(__dirname, '../..', process.env.OUTPUT_TO_FOLDER, '404.html'), handlebars.compile(errorPage.toString())(data));
 
-      fs.writeFileSync(path.join(__dirname, '../', process.env.OUTPUT_TO_FOLDER, 'style.css'), readFileSync(path.join(__dirname, 'assets', 'style.css')).toString());
+      fs.writeFileSync(path.join(__dirname, '../..', process.env.OUTPUT_TO_FOLDER, 'style.css'), readFileSync(path.join(__dirname, 'assets', 'style.css')).toString());
       done(null, { success: true });
     } else {
       if (process.env.IS_DEFAULT_RUNTIME === 'TRUE') {

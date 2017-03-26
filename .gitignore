@@ -1,6 +1,6 @@
 /.env
-/app/tests/*
-!/app/tests/.gitkeep
+/functions/app/tests/*
+!/functions/app/tests/.gitkeep
 /dist/
 /template.deployed.yml
 node_modules/

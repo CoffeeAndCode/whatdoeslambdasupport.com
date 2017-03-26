@@ -1,4 +1,4 @@
-const { handler } = require('./app/index');
+const { handler } = require('./functions/app/index');
 
 require('dotenv').config();
 
