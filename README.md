@@ -1,3 +1,7 @@
+> At this point, I'm not sure this project provides much value since many of the es5, es6, js-next, etc features are now commonly found in the Node versions that AWS Lambda supports. The website whatdoeslambdasupport.com has been allowed to expire and this project is no longer being maintained.
+
+-----
+
 # What Does Lambda Support
 
 > http://whatdoeslambdasupport.com
