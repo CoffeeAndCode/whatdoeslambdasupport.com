@@ -1,4 +1,6 @@
-> At this point, I'm not sure this project provides much value since many of the es5, es6, js-next, etc features are now commonly found in the Node versions that AWS Lambda supports. The website whatdoeslambdasupport.com has been allowed to expire and this project is no longer being maintained.
+> This project is looking for contributors.
+>
+> The decision was made to redirect whatdoeslambdasupport.com to this project until it is actively maintained again. If you would like to contribute to the project, please open an issue and let us know.
 
 -----
 
